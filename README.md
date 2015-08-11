@@ -30,7 +30,7 @@ $ psychic
         
 ..
 
-2 tests run, 2 successes, 2 assertions. OK.
+2 tests run, 0 failures, 2 assertions.
 Tests ran in 0.000011 secs
 ```
 
