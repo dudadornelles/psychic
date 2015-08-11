@@ -1,0 +1,14 @@
+#include "{{ here }}/../csource/psychic.c"
+
+{% for include in includes %}
+#include "{{ include }}"
+{% endfor %}
+
+int main(int argc, char* argv[]) {
+        int total = 0;
+        {% for test in testcases %}
+        {{ test }};
+        total++;
+        {% endfor %}
+}
+

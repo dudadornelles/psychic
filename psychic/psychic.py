@@ -5,23 +5,18 @@ import string
 import tempfile
 import subprocess
 import os
+from jinja2 import Template
 
 from os import path
 from glob import glob
 
 def write_c_file(*args, **kwargs):
-    template = string.Template(
-"""
-#include "$here/../csource/psychic.c"
-$includes
-int main(int argc, char* argv[]) {
-$testcases
-}
-""")
-    includes = "\n".join(["#include \"%s\"" % path.abspath(include) for include in kwargs['includes']])
-    testcases = ";\n".join(kwargs['testcases']) + ";"
+    here = path.abspath(path.dirname(__file__))
+    template = Template(open("%s/testfile.c.jinja" % here).read())
+    includes = map(path.abspath, kwargs['includes'])
+    testcases = kwargs['testcases']
     tmpdir = kwargs['tmpdir']
-    content = template.substitute(includes=includes, testcases=testcases, here=path.abspath(path.dirname(__file__)))
+    content = template.render(includes=includes, testcases=testcases, here=here)
 
     testfile_path = path.join(tmpdir, "testfile.c")
     testfile = open(testfile_path, "w")

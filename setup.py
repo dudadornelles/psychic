@@ -10,8 +10,10 @@ setup(
         license='MIT',
         keywords='c unit test',
         packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+        install_requires=['jinja2'],
         package_data={
-            'csource': ['psychic.h', 'psychic.c']
+            'csource': ['psychic.h', 'psychic.c'],
+            'psychic': ['testfile.c.jinja'],
             },
         entry_points={
             'console_scripts': [
