@@ -28,11 +28,14 @@ def write_c_file(*args, **kwargs):
 
 def compile_and_run(c_file_path, tmpdir):
     testfile_object_path = path.join(tmpdir, "testfile.o")
+
+    # TODO: add user lib to compile path
     subprocess.call(["gcc", c_file_path, "-o", testfile_object_path, "-I."])
     subprocess.call(testfile_object_path)
     
 
 def extract_testcases(test_filename):
+    # TODO: use a code analyzer to do this
     stream = open(test_filename).read()
     pattern = "void (test_.*?\(\)) {"
     return re.findall(pattern, stream)
@@ -40,6 +43,8 @@ def extract_testcases(test_filename):
 
 def main():
     tmpdir = tempfile.mkdtemp()
+
+    # TODO: get'em recursively
     testfiles = glob("test_*.c")
     testcases = []
 
