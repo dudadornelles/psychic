@@ -1,5 +1,3 @@
-#include "ectest.c"
-
 void test_something() {
         assert_true(1+1 == 2);
 }

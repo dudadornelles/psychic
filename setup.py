@@ -10,6 +10,9 @@ setup(
         license='MIT',
         keywords='c unit test',
         packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+        package_data={
+            'csource': ['psychic.h', 'psychic.c']
+            },
         entry_points={
             'console_scripts': [
                 'psychic=psychic:main',
