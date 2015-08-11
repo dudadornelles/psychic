@@ -1,19 +1,35 @@
-#ifndef ECTEST_S
+#ifndef PCTEST_S
 
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 
-void ec_succeed() {
-        printf("success\n");
+int failures = 0;
+int assertions;
+int success;
+
+void pc_succeed() {
+        printf(".");
 }
 
-void ec_fail() {
-        printf("assertion error\n");
+void pc_fail() {
+        printf("F");
 }
 
 void assert_true(int r) {
-        r ? ec_succeed() : ec_fail();
+        if (r) {
+                pc_succeed();
+        } else {
+                pc_fail();
+        }
 }
-#define ECTEST_S
+
+void assert_equals_int(int a, int b) {
+        if (a == b) {
+                pc_succeed();
+        } else {
+                pc_fail();
+        }
+}
+#define PCTEST_S
 #endif
