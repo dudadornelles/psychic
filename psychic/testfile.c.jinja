@@ -22,7 +22,11 @@ int main(int argc, char* argv[]) {
         pc_total++;
         if (pc_current_test_failed) {
             pc_failures++;
+            printf("F");
+        } else {
+            printf(".");
         }
+
         pc_current_test_failed=0;
 {% endfor %}
 
