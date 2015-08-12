@@ -12,7 +12,7 @@ setup(
         packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
         install_requires=['jinja2'],
         package_data={
-            'csource': ['psychic.h', 'psychic.c', 'psychic_share.h'],
+            'psychic.csource': ['psychic.h', 'psychic.c', 'psychic_share.h'],
             'psychic': ['testfile.c.jinja'],
             },
         entry_points={

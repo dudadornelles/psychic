@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "{{ here }}/../csource/psychic.c"
-#include "{{ here }}/../csource/psychic_share.h"
+#include "{{ here }}/csource/psychic.c"
+#include "{{ here }}/csource/psychic_share.h"
 
 {% for include in includes %}
 #include "{{ include }}"
@@ -13,16 +13,19 @@ int pc_current_test_failed = 0;
 
 int main(int argc, char* argv[]) {
         printf("\n");
+
         int pc_total = 0;
         int pc_failures = 0;
-        {% for test in testcases %}
+
+{% for test in testcases %}
         {{ test }};
         pc_total++;
         if (pc_current_test_failed) {
             pc_failures++;
         }
         pc_current_test_failed=0;
-        {% endfor %}
+{% endfor %}
+
         printf("\n\n%d tests ran, ", pc_total);
         printf("%d failures, ", pc_failures);
         printf("%d assertions\n", pc_total_assertions);
