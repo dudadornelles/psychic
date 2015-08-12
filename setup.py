@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
         name='psychic',
-        version='0.0.1',
+        version='0.0.2',
         description='Unit testing library for C - powered by python',
-        url='https://github.com/dudadornelles/tcc',
+        url='https://github.com/dudadornelles/psychic',
         author='Duda Dornelles',
         author_email='dudassdornelles@gmail.com',
         license='MIT',
