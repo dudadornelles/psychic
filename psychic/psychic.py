@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import re
+import argparse
 import string
 import tempfile
 import subprocess
@@ -28,12 +29,11 @@ def write_c_file(*args, **kwargs):
     return testfile_path
 
 
-def compile_and_run(c_file_path, tmpdir):
+def compile_and_run(c_file_path, cargs, tmpdir):
     testfile_object_path = path.join(tmpdir, "testfile.o")
     psychic_c_dep = path.join(_here(), "csource", "psychic.c")
 
-    # TODO: add user lib to compile path
-    subprocess.call(["gcc", psychic_c_dep, c_file_path, "-o", testfile_object_path, "-I."])
+    subprocess.call("gcc %s %s -o %s -I. %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
     subprocess.call(testfile_object_path)
     
 
@@ -52,17 +52,29 @@ def all_testfiles_r():
                 all_files.append(os.path.join(path, name))
     return all_files
 
-def main():
-    tmpdir = tempfile.mkdtemp()
 
-    testfiles = all_testfiles_r()
+def parseargs():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--cargs')
+    args = parser.parse_args()
+    return args.cargs or ""
+    
+
+def all_testcases(testfiles):
     testcases = []
-
     for test_file in testfiles:
         testcases.extend(extract_testcases(test_file))
+    return testcases
+     
+
+def main():
+    cargs = parseargs()
+    tmpdir = tempfile.mkdtemp()
+    testfiles = all_testfiles_r()
+    testcases = all_testcases(testfiles)
         
     c_file = write_c_file(includes=testfiles, testcases=testcases, tmpdir=tmpdir)
-    compile_and_run(c_file, tmpdir)
+    compile_and_run(c_file, cargs, tmpdir)
 
 
 if __name__ == "__main__": 
