@@ -4,11 +4,11 @@ Python-Powered C Unit Testing Library.
 * Recursively finds all test_*.c files
 * Assumes any function name that starts with "test_" to be a test
 * Automagically adds the needed headers, you can just go ahead and write assertions
-* 
+* All you need to do is to type `psychic`!
 
 ## Getting Started
 
-I swear I looked for them but all C Unit testing libraries didn't cut for me. I wanted to do something like this:
+I swear I looked at them but all but C Unit testing libraries they just didn't work the way I wanted. I was thinking one should be able to do this:
 
 ```sh
 $ pip install psychic
@@ -26,7 +26,7 @@ $ psychic
 
 2 tests run, 0 failures, 2 assertions.
 ```
-And that's pretty much how psychic works.
+And so that's pretty much how psychic works.
 
 ## Assertions
 ```c
