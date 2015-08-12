@@ -14,11 +14,9 @@ from glob import glob
 def _here():
     return path.abspath(path.dirname(__file__))
 
-def write_c_file(*args, **kwargs):
+def write_c_file(includes, testcases, tmpdir):
     template = Template(open("%s/testfile.c.jinja" % _here()).read())
-    includes = map(path.abspath, kwargs['includes'])
-    testcases = kwargs['testcases']
-    tmpdir = kwargs['tmpdir']
+    includes = map(path.abspath, includes)
     content = template.render(includes=includes, testcases=testcases, here=_here())
 
     testfile_path = path.join(tmpdir, "testfile.c")
@@ -33,14 +31,14 @@ def compile_and_run(c_file_path, cargs, tmpdir):
     testfile_object_path = path.join(tmpdir, "testfile.o")
     psychic_c_dep = path.join(_here(), "csource", "psychic.c")
 
-    subprocess.call("gcc %s %s -o %s -I. %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
+    subprocess.call("gcc %s %s -o %s %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
     subprocess.call(testfile_object_path)
     
 
 def extract_testcases(test_filename):
     # TODO: use a code analyzer to do this
     stream = open(test_filename).read()
-    pattern = "void (test_.*?\(\)) {"
+    pattern = "void\s*(test_.*?\(\))"
     return re.findall(pattern, stream)
 
 

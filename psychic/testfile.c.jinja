@@ -11,7 +11,8 @@
 int pc_total_assertions = 0;
 int pc_current_test_failed = 0;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
         printf("\n");
 
         int pc_total = 0;
@@ -20,10 +21,12 @@ int main(int argc, char* argv[]) {
 {% for test in testcases %}
         {{ test }};
         pc_total++;
-        if (pc_current_test_failed) {
+        if (pc_current_test_failed) 
+        {
             pc_failures++;
             printf("F");
-        } else {
+        } else 
+        {
             printf(".");
         }
 

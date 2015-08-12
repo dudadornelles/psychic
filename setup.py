@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
         name='psychic',
-        version='0.0.2',
+        version='0.1.0a',
         description='Unit testing library for C - powered by python',
         url='https://github.com/dudadornelles/psychic',
         author='Duda Dornelles',
         author_email='dudassdornelles@gmail.com',
-        license='MIT',
+        license='Apache2',
         keywords='c unit test',
         packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
         install_requires=['jinja2'],
