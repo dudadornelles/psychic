@@ -10,13 +10,15 @@ from jinja2 import Template
 from os import path
 from glob import glob
 
+def _here():
+    return path.abspath(path.dirname(__file__))
+
 def write_c_file(*args, **kwargs):
-    here = path.abspath(path.dirname(__file__))
-    template = Template(open("%s/testfile.c.jinja" % here).read())
+    template = Template(open("%s/testfile.c.jinja" % _here()).read())
     includes = map(path.abspath, kwargs['includes'])
     testcases = kwargs['testcases']
     tmpdir = kwargs['tmpdir']
-    content = template.render(includes=includes, testcases=testcases, here=here)
+    content = template.render(includes=includes, testcases=testcases, here=_here())
 
     testfile_path = path.join(tmpdir, "testfile.c")
     testfile = open(testfile_path, "w")
@@ -28,9 +30,10 @@ def write_c_file(*args, **kwargs):
 
 def compile_and_run(c_file_path, tmpdir):
     testfile_object_path = path.join(tmpdir, "testfile.o")
+    psychic_c_dep = path.join(_here(), "csource", "psychic.c")
 
     # TODO: add user lib to compile path
-    subprocess.call(["gcc", c_file_path, "-o", testfile_object_path, "-I."])
+    subprocess.call(["gcc", psychic_c_dep, c_file_path, "-o", testfile_object_path, "-I."])
     subprocess.call(testfile_object_path)
     
 
@@ -41,11 +44,18 @@ def extract_testcases(test_filename):
     return re.findall(pattern, stream)
 
 
+def all_testfiles_r():
+    all_files = []
+    for path, subdirs, files in os.walk("."):
+        for name in files:
+            if name.startswith('test_') and name.endswith('.c'):
+                all_files.append(os.path.join(path, name))
+    return all_files
+
 def main():
     tmpdir = tempfile.mkdtemp()
 
-    # TODO: get'em recursively
-    testfiles = glob("test_*.c")
+    testfiles = all_testfiles_r()
     testcases = []
 
     for test_file in testfiles:

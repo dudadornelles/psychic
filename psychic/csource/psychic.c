@@ -1,5 +1,3 @@
-#ifndef PCTEST_S
-
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -33,5 +31,4 @@ void assert_equals_int(int a, int b) {
                 pc_fail();
         }
 }
-#define PCTEST_S
-#endif
+
