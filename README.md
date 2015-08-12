@@ -41,7 +41,7 @@ void assert_equals_double(double a, double b);
 ```
 
 ## Options
---cargs= : adds arguments to the C compiler (a common one will be -I for passing user library paths)
+* --cargs= : adds arguments to the C compiler (a common one will be -I for passing user library paths)
 
 ## License
 ```
