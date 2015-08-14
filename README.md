@@ -8,7 +8,7 @@ Python-Powered C Unit Testing Library.
 
 ## Getting Started
 
-I swear I looked at them but all but C Unit testing libraries they just didn't work the way I wanted. I was thinking one should be able to do this:
+I swear I looked at all of them but C Unit testing libraries they just didn't work the way I wanted. I was thinking one should be able to do this:
 
 ```sh
 $ pip install psychic
