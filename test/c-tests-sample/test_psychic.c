@@ -29,3 +29,15 @@ void test_assert_equals_str_fail()
         assert_equals_str("abc", "def");
 }
 
+void test_assert_null() 
+{
+        char *c = NULL;
+        assert_null(c);
+}
+
+void test_assert_null_fail()
+{
+        char *c = malloc(sizeof(char));
+        assert_null(c);
+}
+
