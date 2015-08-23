@@ -27,12 +27,18 @@ def write_c_file(includes, testcases, tmpdir):
     return testfile_path
 
 
-def compile_and_run(c_file_path, cargs, tmpdir):
+def compile_and_run(c_file_path, args, tmpdir):
     testfile_object_path = path.join(tmpdir, "testfile.o")
     psychic_c_dep = path.join(_here(), "csource", "psychic.c")
+    cargs, debug = args['cargs'], args['debug']
 
-    subprocess.call("gcc %s %s -o %s %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
-    subprocess.call(testfile_object_path)
+    if (debug):
+        import pdb;pdb.set_trace
+        subprocess.call("gcc -g %s %s -o %s %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
+        subprocess.call("gdb %s" % testfile_object_path, shell=True)
+    else:
+        subprocess.call("gcc %s %s -o %s %s" % (psychic_c_dep, c_file_path, testfile_object_path, cargs), shell=True)
+        subprocess.call(testfile_object_path)
     
 
 def extract_testcases(test_filename):
@@ -52,10 +58,15 @@ def all_testfiles_r():
 
 
 def parseargs():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--cargs')
+    parser = argparse.ArgumentParser(description="Python-powered C Unit Testing - http://github.com/dudadornelles/psychic")
+    parser.add_argument('--cargs', help="CARGS to be passed to the compiler")
+    parser.add_argument('-d', '--debug', action='store_true', help="Run in debug mode with gdb")
     args = parser.parse_args()
-    return args.cargs or ""
+    return { 
+            'cargs': args.cargs or "",
+            'debug': args.debug or False
+            }
+
     
 
 def all_testcases(testfiles):
@@ -66,13 +77,13 @@ def all_testcases(testfiles):
      
 
 def main():
-    cargs = parseargs()
+    args = parseargs()
     tmpdir = tempfile.mkdtemp()
     testfiles = all_testfiles_r()
     testcases = all_testcases(testfiles)
         
     c_file = write_c_file(includes=testfiles, testcases=testcases, tmpdir=tmpdir)
-    compile_and_run(c_file, cargs, tmpdir)
+    compile_and_run(c_file, args, tmpdir)
 
 
 if __name__ == "__main__": 
