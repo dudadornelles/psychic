@@ -6,6 +6,7 @@
 #include "psychic_share.h"
 
 int pc_total_assertions;
+int pc_current_test_failed;
 
 void pc_fail() {
         pc_current_test_failed = 1;

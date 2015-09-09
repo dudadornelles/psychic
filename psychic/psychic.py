@@ -5,6 +5,7 @@ import argparse
 import string
 import tempfile
 import subprocess
+import sys
 import os
 from jinja2 import Template
 
@@ -41,7 +42,8 @@ def compile_and_run(c_file_path, args, tmpdir):
         subprocess.call("gdb %s" % testfile_object_path, shell=True)
     else:
         subprocess.call(gcc_line, shell=True)
-        subprocess.call(testfile_object_path)
+        number_of_errors = int(subprocess.call(testfile_object_path))
+    return number_of_errors
 
 
 def testcases_in(test_filename):
@@ -72,13 +74,21 @@ def parseargs():
 
 
 def main():
+    print "\n"
     args = parseargs()
     tmpdir = tempfile.mkdtemp()
+    total_failures = 0
+    total_tests = 0
 
     for testfile in all_testfiles_r():
-        c_file = write_c_file(includes=[testfile], testcases=testcases_in(testfile), tmpdir=tmpdir)
-        compile_and_run(c_file, args, tmpdir)
+        testcases = testcases_in(testfile)
+        c_file = write_c_file(includes=[testfile], testcases=testcases, tmpdir=tmpdir)
+        total_failures += compile_and_run(c_file, args, tmpdir)
+        total_tests += len(testcases)
 
+    print "\n\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
+
+    sys.exit(total_failures)
 
 if __name__ == "__main__":
     main()

@@ -13,14 +13,10 @@ int pc_current_test_failed = 0;
 
 int main(int argc, char* argv[]) 
 {
-        printf("\n");
-
-        int pc_total = 0;
         int pc_failures = 0;
 
 {% for test in testcases %}
         {{ test }};
-        pc_total++;
         if (pc_current_test_failed) 
         {
             pc_failures++;
@@ -33,7 +29,5 @@ int main(int argc, char* argv[])
         pc_current_test_failed=0;
 {% endfor %}
 
-        printf("\n\n%d tests ran, ", pc_total);
-        printf("%d failures, ", pc_failures);
-        printf("%d assertions\n", pc_total_assertions);
+       return pc_failures;
 }
