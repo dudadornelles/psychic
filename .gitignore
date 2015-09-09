@@ -4,3 +4,4 @@ psychic.egg-info
 *.pyc
 *.swp
 *.swo
+.venv
