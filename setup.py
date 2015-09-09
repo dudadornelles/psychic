@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='psychic',
-        version='0.1.2a',
+        version='0.1.3a0',
         description='Unit testing library for C - powered by python',
         url='https://github.com/dudadornelles/psychic',
         author='Duda Dornelles',
