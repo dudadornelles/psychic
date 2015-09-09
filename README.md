@@ -30,7 +30,8 @@ $ psychic
 ```
 And so that's pretty much how psychic works.
 
-## Getting Started:
+The steps to get started would be:
+
 * Install psychic: `pip install psychic`
 * Write a test by creating a file called "test_something.c"
 ```c
