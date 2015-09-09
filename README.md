@@ -2,8 +2,8 @@
 
 Python-Powered C Unit Testing Library.
 * Recursively finds all test_*.c files
-* supports setup and teardowon
-* returns 0 if all tests pass and n != 0 if some of them fail (with n equals to the number of failed tests)
+* Supports setup and teardown
+* Returns 0 if all tests pass and n != 0 if some of them fail (with n equals to the number of failed tests)
 * Assumes any function name that starts with "test_" to be a test
 * Automagically adds the needed headers, you can just go ahead and write assertions
 * All you need to do is to type `psychic`!
