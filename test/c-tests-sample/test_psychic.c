@@ -1,9 +1,9 @@
 void setup() {
-        printf("\n this is the setup running\n");
+        printf("this is the setup running\n");
 }
 
 void teardown() {
-        printf("\n this is the teardown running\n");
+        printf("\nthis is the teardown running\n");
 }
 
 

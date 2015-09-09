@@ -79,7 +79,6 @@ def parseargs():
 
 
 def main():
-    print "\n"
     args = parseargs()
     tmpdir = tempfile.mkdtemp()
     total_failures = 0

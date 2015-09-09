@@ -2,6 +2,8 @@
 
 Python-Powered C Unit Testing Library.
 * Recursively finds all test_*.c files
+* supports setup and teardowon
+* returns 0 if all tests pass and n != 0 if some of them fail (with n equals to the number of failed tests)
 * Assumes any function name that starts with "test_" to be a test
 * Automagically adds the needed headers, you can just go ahead and write assertions
 * All you need to do is to type `psychic`!
@@ -28,6 +30,27 @@ $ psychic
 ```
 And so that's pretty much how psychic works.
 
+## Getting Started:
+* Install psychic: `pip install psychic`
+* Write a test by creating a file called "test_something.c"
+```c
+void test_something() {
+        assert_equals_str("this", "that");
+}
+```
+* Run with `psychic`. It will fail
+* Fix it and run it again to see it passing
+* You can add `setup` and `teardown`
+```c
+void setup() {
+// do something before each test in this file
+}
+
+void teardown() {
+// do something _after_ each test in this file
+}
+```
+
 ## Assertions
 ```c
 void assert(int b);
@@ -50,6 +73,7 @@ void assert_not_equals_double(char *a, char *b);
 
 ## Options
 * --cargs= : adds arguments to the C compiler (a common one will be -I for passing user library paths)
+* -d : run on debug mode (requires gdb to be installed)
 
 ## License
 ```
