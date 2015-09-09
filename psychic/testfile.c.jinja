@@ -16,6 +16,10 @@ int main(int argc, char* argv[])
         int pc_failures = 0;
 
 {% for test in testcases %}
+        {% for _setup in setup %}
+            {{ _setup }};
+        {% endfor %}
+
         {{ test }};
         if (pc_current_test_failed) 
         {
@@ -27,6 +31,10 @@ int main(int argc, char* argv[])
         }
 
         pc_current_test_failed=0;
+
+        {% for _teardown in teardown %}
+            {{ _teardown }};
+        {% endfor %}
 {% endfor %}
 
        return pc_failures;

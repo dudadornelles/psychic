@@ -17,11 +17,14 @@ def _here():
     return path.abspath(path.dirname(__file__))
 
 
-def write_c_file(includes, testcases, tmpdir):
+def write_c_file(includes, testcases, setup, teardown, tmpdir):
     template = Template(open("%s/testfile.c.jinja" % _here()).read())
     includes = map(path.abspath, includes)
     content = template.render(includes=includes,
-                              testcases=testcases, here=_here())
+                              testcases=testcases, 
+                              setup=setup,
+                              teardown=teardown,
+                              here=_here())
 
     testfile_path = path.join(tmpdir, "testfile.c")
     testfile = open(testfile_path, "w")
@@ -49,8 +52,10 @@ def compile_and_run(c_file_path, args, tmpdir):
 def testcases_in(test_filename):
     # TODO: use a code analyzer to do this
     stream = open(test_filename).read()
-    pattern = "void\s*(test_.*?\(\))"
-    return re.findall(pattern, stream)
+    test_pattern = "void\s*(test_.*?\(\))"
+    setup_pattern = "void\s*(setup.*?\(\))"
+    teardown_pattern = "void\s*(teardown.*?\(\))"
+    return re.findall(test_pattern, stream),re.findall(setup_pattern, stream), re.findall(teardown_pattern, stream)
 
 
 def all_testfiles_r():
@@ -81,8 +86,8 @@ def main():
     total_tests = 0
 
     for testfile in all_testfiles_r():
-        testcases = testcases_in(testfile)
-        c_file = write_c_file(includes=[testfile], testcases=testcases, tmpdir=tmpdir)
+        testcases, setup, teardown = testcases_in(testfile)
+        c_file = write_c_file(includes=[testfile], testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir)
         total_failures += compile_and_run(c_file, args, tmpdir)
         total_tests += len(testcases)
 

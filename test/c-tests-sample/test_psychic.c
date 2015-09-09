@@ -1,3 +1,12 @@
+void setup() {
+        printf("\n this is the setup running\n");
+}
+
+void teardown() {
+        printf("\n this is the teardown running\n");
+}
+
+
 void test_assertions ()
 {
         char *c;
