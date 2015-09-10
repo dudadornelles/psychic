@@ -1,11 +1,3 @@
-void setup() {
-        printf("this is the setup running\n");
-}
-
-void teardown() {
-        printf("\nthis is the teardown running\n");
-}
-
 
 void test_assertions ()
 {

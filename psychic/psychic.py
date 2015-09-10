@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import uuid
 import re
 import argparse
 import string
@@ -17,11 +18,14 @@ def _here():
     return path.abspath(path.dirname(__file__))
 
 
-def write_c_file(includes, testcases, setup, teardown, tmpdir):
+def write_c_file(testfile, testcases, setup, teardown, tmpdir, results_tmpdir):
     template = Template(open("%s/testfile.c.jinja" % _here()).read())
-    includes = map(path.abspath, includes)
-    content = template.render(includes=includes,
+    testfile = path.abspath(testfile)
+
+    results_file = path.join(results_tmpdir, str(uuid.uuid4()))
+    content = template.render(testfile=testfile,
                               testcases=testcases, 
+                              results_file=results_file,
                               setup=setup,
                               teardown=teardown,
                               here=_here())
@@ -78,19 +82,30 @@ def parseargs():
     }
 
 
+def print_error_messages(results_tmpdir):
+    str_error_messages = "\n"
+    for path, subdirs, files in os.walk(results_tmpdir):
+        for name in files:
+            str_error_messages += open(os.path.join(path, name)).read()
+    print str_error_messages
+
+
 def main():
+    print ""
     args = parseargs()
     tmpdir = tempfile.mkdtemp()
+    results_tmpdir = tempfile.mkdtemp()
     total_failures = 0
     total_tests = 0
 
     for testfile in all_testfiles_r():
         testcases, setup, teardown = testcases_in(testfile)
-        c_file = write_c_file(includes=[testfile], testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir)
+        c_file = write_c_file(testfile=testfile, testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir, results_tmpdir=results_tmpdir)
         total_failures += compile_and_run(c_file, args, tmpdir)
         total_tests += len(testcases)
 
-    print "\n\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
+    print_error_messages(results_tmpdir)
+    print "\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
 
     sys.exit(total_failures)
 

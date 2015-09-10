@@ -4,15 +4,17 @@
 #include "{{ here }}/csource/psychic.h"
 #include "{{ here }}/csource/psychic_share.h"
 
-{% for include in includes %}
-#include "{{ include }}"
-{% endfor %}
+#include "{{ testfile }}"
 
 int pc_total_assertions = 0;
 int pc_current_test_failed = 0;
 
+char* pc_current_test_name;
+FILE* pc_error_messages;
+
 int main(int argc, char* argv[]) 
 {
+        pc_error_messages = fopen("{{ results_file }}", "w");
         int pc_failures = 0;
 
 {% for test in testcases %}
@@ -20,6 +22,7 @@ int main(int argc, char* argv[])
             {{ _setup }};
         {% endfor %}
 
+        pc_current_test_name = "\"{{ testfile }}:{{ test }}\"";
         {{ test }};
         if (pc_current_test_failed) 
         {
@@ -37,5 +40,5 @@ int main(int argc, char* argv[])
         {% endfor %}
 {% endfor %}
 
-       return pc_failures;
+        return pc_failures;
 }
