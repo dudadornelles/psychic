@@ -10,28 +10,6 @@ Python-Powered C Unit Testing Library.
 
 ## Getting Started
 
-I swear I looked at all of them but C Unit testing libraries they just didn't work the way I wanted. I was thinking one should be able to do this:
-
-```sh
-$ pip install psychic
-$ cat test_example.c
-void test_sum() {
-        assert_equals_int(1+1, 2);
-}
-
-void test_string_comparison() {
-        assert_equals_str("abc", "abc");
-}
-$ psychic
-        
-..
-
-2 tests run, 0 failures, 2 assertions.
-```
-And so that's pretty much how psychic works.
-
-The steps to get started would be:
-
 * Install psychic: `pip install psychic`
 * Write a test by creating a file called "test_something.c"
 ```c
