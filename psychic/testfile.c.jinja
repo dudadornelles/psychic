@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
             {{ _setup }};
         {% endfor %}
 
-        pc_current_test_name = "{{ testfile }}:{{ test }}";
+        pc_current_test_name = "{{ testfile }}:{{ format_testname(test) }}";
         {{ test }};
         if (pc_current_test_failed) 
         {

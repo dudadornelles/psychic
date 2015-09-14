@@ -19,6 +19,9 @@ def _here():
 
 
 def write_c_file(testfile, testcases, setup, teardown, tmpdir, results_tmpdir):
+    def format_testname(testname):
+        return re.sub(r'[ ()]', '', testname)
+
     template = Template(open("%s/testfile.c.jinja" % _here()).read())
     testfile = path.abspath(testfile)
 
@@ -28,6 +31,7 @@ def write_c_file(testfile, testcases, setup, teardown, tmpdir, results_tmpdir):
                               results_file=results_file,
                               setup=setup,
                               teardown=teardown,
+                              format_testname=format_testname,
                               here=_here())
 
     testfile_path = path.join(tmpdir, "testfile.c")
