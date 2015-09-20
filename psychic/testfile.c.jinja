@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
             {{ _teardown }};
         {% endfor %}
 {% endfor %}
-
-        return pc_failures;
+        if (pc_failures > 0) {
+            return 1;
+        }
+        return 0;
 }
