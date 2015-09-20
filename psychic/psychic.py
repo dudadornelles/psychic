@@ -77,12 +77,14 @@ def all_testfiles_r():
 
 def parseargs():
     parser = argparse.ArgumentParser(description="Python-powered C Unit Testing - http://github.com/dudadornelles/psychic")
+    parser.add_argument('test', help="testfile:testname; e.g. test/test_stuff.c:test_does_stuf", nargs="?")
     parser.add_argument('--cargs', help="CARGS to be passed to the compiler")
     parser.add_argument('-d', '--debug', action='store_true', help="Run in debug mode with gdb")
     args = parser.parse_args()
     return {
         'cargs': args.cargs or "",
-        'debug': args.debug or False
+        'debug': args.debug or False,
+        'test': args.test and (args.test.split(":") + [None])[0:2] or None
     }
 
 
@@ -102,11 +104,21 @@ def main():
     total_failures = 0
     total_tests = 0
 
-    for testfile in all_testfiles_r():
+    if args["test"]:
+        testfile = args["test"][0]
         testcases, setup, teardown = testcases_in(testfile)
+        if args["test"][1]:
+            testcases =  [args["test"][1] + "()"] 
+
         c_file = write_c_file(testfile=testfile, testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir, results_tmpdir=results_tmpdir)
         total_failures += compile_and_run(c_file, args, tmpdir)
         total_tests += len(testcases)
+    else:
+        for testfile in all_testfiles_r():
+            testcases, setup, teardown = testcases_in(testfile)
+            c_file = write_c_file(testfile=testfile, testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir, results_tmpdir=results_tmpdir)
+            total_failures += compile_and_run(c_file, args, tmpdir)
+            total_tests += len(testcases)
 
     print_error_messages(results_tmpdir)
     print "\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
