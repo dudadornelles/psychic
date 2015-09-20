@@ -57,16 +57,19 @@ def compile_and_run(c_file_path, args, tmpdir):
     return number_of_errors
 
 
-def testcases_in(test_filename):
+def testcases_in(test_filename, test_config):
     # TODO: use a code analyzer to do this
     stream = open(test_filename).read()
     test_pattern = "void\s*(test_.*?\(\))"
     setup_pattern = "void\s*(setup.*?\(\))"
     teardown_pattern = "void\s*(teardown.*?\(\))"
-    return re.findall(test_pattern, stream),re.findall(setup_pattern, stream), re.findall(teardown_pattern, stream)
+    testcases = [test_config[1] +"()"] if test_config[1] else re.findall(test_pattern, stream)
+    return testcases, re.findall(setup_pattern, stream), re.findall(teardown_pattern, stream)
 
 
-def all_testfiles_r():
+def all_testfiles_r(test_config):
+    if test_config[0]:
+        return [test_config[0]]
     all_files = []
     for path, subdirs, files in os.walk("."):
         for name in files:
@@ -84,7 +87,7 @@ def parseargs():
     return {
         'cargs': args.cargs or "",
         'debug': args.debug or False,
-        'test': args.test and (args.test.split(":") + [None])[0:2] or None
+        'test': args.test and (args.test.split(":") + [None])[0:2] or (None, None)
     }
 
 
@@ -103,22 +106,13 @@ def main():
     results_tmpdir = tempfile.mkdtemp()
     total_failures = 0
     total_tests = 0
+    test_config = args["test"]
 
-    if args["test"]:
-        testfile = args["test"][0]
-        testcases, setup, teardown = testcases_in(testfile)
-        if args["test"][1]:
-            testcases =  [args["test"][1] + "()"] 
-
+    for testfile in all_testfiles_r(test_config):
+        testcases, setup, teardown = testcases_in(testfile, test_config)
         c_file = write_c_file(testfile=testfile, testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir, results_tmpdir=results_tmpdir)
         total_failures += compile_and_run(c_file, args, tmpdir)
         total_tests += len(testcases)
-    else:
-        for testfile in all_testfiles_r():
-            testcases, setup, teardown = testcases_in(testfile)
-            c_file = write_c_file(testfile=testfile, testcases=testcases, setup=setup, teardown=teardown, tmpdir=tmpdir, results_tmpdir=results_tmpdir)
-            total_failures += compile_and_run(c_file, args, tmpdir)
-            total_tests += len(testcases)
 
     print_error_messages(results_tmpdir)
     print "\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
