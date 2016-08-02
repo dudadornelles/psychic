@@ -96,11 +96,11 @@ def print_error_messages(results_tmpdir):
     for path, subdirs, files in os.walk(results_tmpdir):
         for name in files:
             str_error_messages += open(os.path.join(path, name)).read()
-    print str_error_messages
+    print(str_error_messages)
 
 
 def main():
-    print ""
+    print("")
     args = parseargs()
     tmpdir = tempfile.mkdtemp()
     results_tmpdir = tempfile.mkdtemp()
@@ -115,7 +115,7 @@ def main():
         total_tests += len(testcases)
 
     print_error_messages(results_tmpdir)
-    print "\nTests ran: %s, Failures: %s" % (total_tests, total_failures)
+    print("\nTests ran: %s, Failures: %s" % (total_tests, total_failures))
 
     sys.exit(total_failures)
 
